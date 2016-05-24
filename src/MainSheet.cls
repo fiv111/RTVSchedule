@@ -8,23 +8,17 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = True
 Private Sub Worksheet_Change(ByVal Target As Range)
-  If Intersect(Target, Range("$B:$H")) Is Nothing Then
+  If Intersect(Target, Range("$A:$I")) Is Nothing Then
     Exit Sub
-  Else
+  End If
   
-    ' 自動計算停止
-    Call RTVScheduleModule.stopCalculate
-    ActiveSheet.Calculate
-    Call RTVScheduleModule.startCalculate
-      
-    ' 開始日か終了日がいじられた場合は、カレンダーを更新する。
-    If (Target.Column >= 4 And Target.Row >= 8) Or (Target.Address = RTVScheduleModule.kStartDay Or Target.Address = RTVScheduleModule.kFinDay) Then
-      ' スケジュールを描写する。
-      Call RTVScheduleModule.stopCalculate
-      ActiveSheet.Calculate
-      Call RTVScheduleModule.drawSchedule
+  If MainModule.binding = True Then
+    If (Target.Column >= 5 And Target.Column <= 8) And (Target.Row > 6) Then
+      Call MainModule.updateTask
     End If
-
-    Call RTVScheduleModule.startCalculate
+  Else
+    Call UtilModule.stopCalculate
+    ActiveSheet.Calculate
+    Call UtilModule.startCalculate
   End If
 End Sub

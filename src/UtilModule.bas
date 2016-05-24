@@ -6,16 +6,16 @@ Attribute VB_Name = "UtilModule"
 ' 自動更新停止
 Public Sub stopCalculate()
   Application.ScreenUpdating = False
-  'ActiveSheet.EnableCalculation = False
+  ActiveSheet.EnableCalculation = False
   Application.Calculation = xlCalculationManual
 End Sub
 
 
 ' 自動更新有効
 Public Sub startCalculate()
-  Application.ScreenUpdating = True
-  'ActiveSheet.EnableCalculation = True
+  ActiveSheet.EnableCalculation = True
   Application.Calculation = xlCalculationAutomatic
+  Application.ScreenUpdating = True
 End Sub
 
 
@@ -41,13 +41,13 @@ End Sub
 ' last row, col
 ' ---
 ' lastRow
-Public Function lastRow(o, Optional first As Integer = 1)
-  lastRow = o.Cells(Rows.Count, first).End(xlUp).row
+Public Function lastRow(o, Optional first As Variant = 1)
+  lastRow = o.Cells(Rows.Count, first).End(xlUp).Row
 End Function
 
 
 ' lastCol
-Public Function lastCol(o, Optional first As Integer = 1)
+Public Function lastCol(o, Optional first As Variant = 1)
   lastCol = o.Cells(first, Columns.Count).End(xlToLeft).Column
 End Function
 
@@ -95,12 +95,12 @@ Public Sub glob(fPath, ary)
   Dim fso As New Scripting.FileSystemObject
   
   For Each f In fso.GetFolder(fPath).files
-    ary.add f
+    ary.Add f
   Next
 
   If fso.GetFolder(fPath).SubFolders.Count > 0 Then
     For Each d In fso.GetFolder(fPath).SubFolders
-      ary.add d
+      ary.Add d
       glob d, ary
     Next
   End If
@@ -135,7 +135,7 @@ Function uniq(ary) As Object
   
   For Each v In ary
     If Not nAry.contains(v) Then
-      nAry.add v
+      nAry.Add v
     End If
   Next
   
@@ -150,4 +150,48 @@ End Function
 Function getRGB(c)
   myColor = Split(c, ",")
   getRGB = RGB(myColor(0), myColor(1), myColor(2))
+End Function
+
+
+' Render the task number.
+Public Function nextId(cid)
+  Set c = Range(cid).Offset(-1)
+
+  If Len(c) <= 0 Or Not IsNumeric(c) Then
+    c = Range(cid).Offset(-2)
+  End If
+
+  c = c + 1
+  nextId = c
+
+  Set c = Nothing
+End Function
+
+
+'---
+' current cell address
+' ---
+' Return an address of current cell.
+' return currentCell
+Public Function curtAddr()
+  curtAddr = Evaluate("ADDRESS(ROW(), COLUMN())")
+End Function
+
+
+' ---
+' get interior color by Formula
+' ---
+Public Function getInteriorColorByFormula(c)
+  Set fc = c.FormatConditions
+  fLen = fc.Count
+  cColor = 0
+
+  For i = 1 To fLen
+    If Evaluate(fc(i).Formula1) = c.Formula Then
+      cColor = fc(i).Interior.color
+    End If
+  Next i
+
+  getInteriorColorByFormula = cColor
+  Set fc = Nothing
 End Function
