@@ -32,37 +32,57 @@ End Sub
 ' ---
 ' textbox init
 Private Sub periodFrameTextboxInit()
+  Set sh = ThisWorkbook.Worksheets(MainModule.kMainSheetName)
   sd = MainModule.startDate
   ed = MainModule.endDate
   
   ' if startDate is empty(00:00:00) set date as today, else set date as input value.
   If sd = CDate("00:00:00") Then
-    Set m = ThisWorkbook.Worksheets(MainModule.kMainSheetName).Range(MainModule.kDefaultStartDayAddr)
+    Set m = sh.Range(MainModule.kDefaultStartDayAddr)
+    
     If Len(m.Value) > 0 Then
       MainForm.PeriodFrame.StartDateText.Value = m.Value
     Else
       MainForm.PeriodFrame.StartDateText.Value = Date
     End If
+    
     Set m = Nothing
   Else
     MainForm.PeriodFrame.StartDateText.Value = sd
   End If
   
-  ' if endDate is empty(00:00:00) set date as today +31, else set date as input value.
-  If ed = CDate("00:00:00") Then
-    MainForm.PeriodFrame.EndDateText.Value = Date + 31
-  Else
-    MainForm.PeriodFrame.EndDateText.Value = ed
+  ' set enddate value
+  ' endDateCol
+  Set n = sh.Range(MainModule.kDefaultStartDayAddr).Offset(0, 3)
+  
+  eCol = n.Column
+  eRow = UtilModule.lastRow(sh, n.Row)
+  
+  Set lastDateCell = sh.Cells(eRow, eCol)
+    
+  If Not IsError(lastDateCell) Then
+    If IsDate(lastDateCell.Value) And Len(lastDateCell.Value) > 0 Then
+      MainForm.PeriodFrame.EndDateText.Value = lastDateCell.Value
+    Else
+      MainForm.PeriodFrame.EndDateText.Value = Date + 31
+    End If
   End If
+  
+  Set lastDateCell = Nothing
+  Set n = Nothing
+  Set sh = Nothing
 End Sub
+
 
 Private Sub StartDateText_MouseDown(ByVal Button As Integer, ByVal Shift As Integer, ByVal X As Single, ByVal Y As Single)
   Call loadCalendarForm
 End Sub
 
+
 Private Sub EndDateText_MouseDown(ByVal Button As Integer, ByVal Shift As Integer, ByVal X As Single, ByVal Y As Single)
   Call loadCalendarForm
 End Sub
+
 
 ' Render button on click handler.
 ' Set start/end date property, and refresh the screen (schedule).
@@ -79,6 +99,7 @@ Private Sub fieldFrameInit()
   MainModule.binding = MainForm.FieldFrame.BindingCheckBox.Value
 End Sub
 
+
 Private Sub BindingCheckBox_Change()
   MainModule.binding = MainForm.FieldFrame.BindingCheckBox.Value
   
@@ -88,6 +109,7 @@ Private Sub BindingCheckBox_Change()
     MainForm.FieldFrame.UpdateButton.Visible = True
   End If
 End Sub
+
 
 Private Sub UpdateButton_Click()
   Call MainModule.updateTask
@@ -99,6 +121,7 @@ End Sub
 Private Sub XlsxButton_Click()
   Call MainModule.saveAsXLSX
 End Sub
+
 
 Private Sub PdfButton_Click()
   Call MainModule.saveAsPDF

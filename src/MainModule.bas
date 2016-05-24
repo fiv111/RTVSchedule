@@ -247,17 +247,12 @@ End Sub
 
 ' renderCalendar
 Private Sub renderCalendar()
-  'Call UtilModule.stopCalculate
-  
   ' clear background color
   Call clearBgColor
   Call drawDate
   Call drawHoliday(kSatColor, kSunColor)
   Call drawTaskHead(kTaskHeadColor)
   Call drawTask
-  
-  'ActiveSheet.Calculate
-  'Call UtilModule.startCalculate
 End Sub
 
 

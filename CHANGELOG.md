@@ -1,5 +1,8 @@
 # CHANGE LOG
 
+## 1.0.2 (2016.5.24)
+- Change the value of endDate.
+
 ## 1.0.1 (2016.5.24)
 - bug fixes.
 
