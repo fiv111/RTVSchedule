@@ -547,18 +547,19 @@ Public Sub saveAsXLSX()
   
   Call UtilModule.stopCalculate
   
-  ' add new workbook
+  ' try
   On Error GoTo ExportError
+  
+  ' copy schedule area
+  Set area = getPrintArea(mainSheet)
+  area.Copy
+  
+  ' add new workbook
   Dim wb As Workbook
   Set wb = Workbooks.Add
   wb.Worksheets(1).name = kMainSheetName
   
-  ' mainsheet copy paste
-  ' schedule area
-  Set area = getPrintArea(mainSheet)
-  area.Copy
-  
-  ' paste
+  ' mainsheet paste
   ' xlPasteValues
   ' xlPasteFormats
   ' xlPasteFormulas
