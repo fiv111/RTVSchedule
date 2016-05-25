@@ -239,5 +239,5 @@ End Function
 
 ' Return the workday in month
 Public Function getWorkdayInMonth(firstDay, lastDay, holidayRange)
-  getWorkdayInThisMonth = Application.WorksheetFunction.NetworkDays(firstDay, lastDay, holidayRange)
+  getWorkdayInMonth = Application.WorksheetFunction.NetworkDays(firstDay, lastDay, holidayRange)
 End Function

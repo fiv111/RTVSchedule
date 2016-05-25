@@ -1,5 +1,8 @@
 # CHANGE LOG
 
+## 1.0.4 (2016.5.25)
+- bug fixes.
+
 ## 1.0.3 (2016.5.25)
 - added some script into UtilModule.
 
