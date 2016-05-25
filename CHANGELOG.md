@@ -1,5 +1,8 @@
 # CHANGE LOG
 
+## 1.0.3 (2016.5.25)
+- added some script into UtilModule.
+
 ## 1.0.2 (2016.5.24)
 - Change the value of endDate.
 

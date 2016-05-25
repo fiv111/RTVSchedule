@@ -195,3 +195,49 @@ Public Function getInteriorColorByFormula(c)
   getInteriorColorByFormula = cColor
   Set fc = Nothing
 End Function
+
+
+' ---
+' timeObject
+' ---
+Public Function timeObject(Optional val = "00:00:00") As Object
+  Set o = CreateObject("Scripting.Dictionary")
+  tmp = Split(val, ":")
+  o.Add "h", tmp(0)
+  o.Add "m", tmp(1)
+  o.Add "s", tmp(2)
+  Set timeObject = o
+  Set o = Nothing
+End Function
+
+
+' Convert time value to second. (Long)
+Public Function time2sec(h, m, s)
+  hourpersec = 60 * 60
+  minPerSec = 60
+  time2Sec = (h * hourpersec) + (m * minPerSec) + s
+End Function
+
+
+' Convert second to time string.
+Public Function sec2time(s) As String
+  sec2Time = Application.WorksheetFunction.Text(CDate(s / 86400#), "[h]:mm:ss")
+End Function
+
+
+' Return the first day in set month.
+Public Function getFirstDayInMonth(today)
+  getFirstDayInMonth = DateSerial(Year(today), Month(today), 1)
+End Function
+
+
+' Return the last day in set month.
+Public Function getLastDayInMonth(today)
+  getLastDayInMonth = DateSerial(Year(today), Month(today) + 1, 0)
+End Function
+
+
+' Return the workday in month
+Public Function getWorkdayInMonth(firstDay, lastDay, holidayRange)
+  getWorkdayInThisMonth = Application.WorksheetFunction.NetworkDays(firstDay, lastDay, holidayRange)
+End Function
