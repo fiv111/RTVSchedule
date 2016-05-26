@@ -74,16 +74,6 @@ Private Sub periodFrameTextboxInit()
 End Sub
 
 
-Private Sub StartDateText_MouseDown(ByVal Button As Integer, ByVal Shift As Integer, ByVal X As Single, ByVal Y As Single)
-  Call loadCalendarForm
-End Sub
-
-
-Private Sub EndDateText_MouseDown(ByVal Button As Integer, ByVal Shift As Integer, ByVal X As Single, ByVal Y As Single)
-  Call loadCalendarForm
-End Sub
-
-
 ' Render button on click handler.
 ' Set start/end date property, and refresh the screen (schedule).
 Private Sub RenderButton_Click()
@@ -125,14 +115,4 @@ End Sub
 
 Private Sub PdfButton_Click()
   Call MainModule.saveAsPDF
-End Sub
-
-
-' ---
-' Private Method
-' ---
-' Call CalendarForm
-Private Sub loadCalendarForm()
-  Load CalendarForm
-  CalendarForm.Show
 End Sub

@@ -215,13 +215,13 @@ End Function
 Public Function time2sec(h, m, s)
   hourpersec = 60 * 60
   minPerSec = 60
-  time2Sec = (h * hourpersec) + (m * minPerSec) + s
+  time2sec = (h * hourpersec) + (m * minPerSec) + s
 End Function
 
 
 ' Convert second to time string.
 Public Function sec2time(s) As String
-  sec2Time = Application.WorksheetFunction.Text(CDate(s / 86400#), "[h]:mm:ss")
+  sec2time = Application.WorksheetFunction.Text(CDate(s / 86400#), "[h]:mm:ss")
 End Function
 
 

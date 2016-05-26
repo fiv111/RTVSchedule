@@ -118,14 +118,20 @@ End Property
 ' load MainForm
 Public Sub loadMainForm()
 Attribute loadMainForm.VB_ProcData.VB_Invoke_Func = "e\n14"
-  Call worksheetInit
+  If worksheetInit() = False Then
+    UtilModule.pMsg kErrorMsg, 1
+    Exit Sub
+  End If
   Load MainForm
 End Sub
 
 
 ' render schedule
 Public Sub render()
-  Call worksheetInit
+  If worksheetInit() = False Then
+    UtilModule.pMsg kErrorMsg, 1
+    Exit Sub
+  End If
   Call insertDefaultStartDate
   Call renderCalendar
 End Sub
@@ -133,7 +139,10 @@ End Sub
 
 ' update task cell
 Public Sub updateTask()
-  Call worksheetInit
+  If worksheetInit() = False Then
+    UtilModule.pMsg kErrorMsg, 1
+    Exit Sub
+  End If
   Call renderCalendar
 End Sub
 
@@ -182,7 +191,10 @@ End Function
 Private Sub Auto_Open()
   Call UtilModule.stopCalculate
   
-  Call worksheetInit
+  If worksheetInit() = False Then
+    UtilModule.pMsg kErrorMsg, 1
+    Exit Sub
+  End If
   Call loadMainForm
   
   mainSheet.Activate
@@ -202,8 +214,11 @@ End Sub
 
 
 ' worksheetInit
-Private Sub worksheetInit()
-  Call setStartEndDate
+Private Function worksheetInit()
+  If setStartEndDate() = False Then
+    worksheetInit = False
+    Exit Function
+  End If
   
   If mainSheet Is Nothing Then
     mainSheet = ThisWorkbook.Worksheets(kMainSheetName)
@@ -222,21 +237,25 @@ Private Sub worksheetInit()
   End If
   
   mainSheet.Activate
-End Sub
+  worksheetInit = True
+End Function
 
 
 ' Set the start/end date value from MainForm.
-Private Sub setStartEndDate()
+Private Function setStartEndDate()
   sd = MainForm.PeriodFrame.StartDateText.Value
   ed = MainForm.PeriodFrame.EndDateText.Value
   
-  If IsDate(sd) And IsDate(ed) Then
-    startDate_ = sd
-    endDate_ = ed
-  Else
-    UtilModule.pMsg kErrorData, 1
+  If Not IsDate(sd) Or Not IsDate(ed) Then
+    UtilModule.pMsg kErrorData & "日付を正しく入力してください。", 1
+    setStartEndDate = False
+    Exit Function
   End If
-End Sub
+    
+  startDate_ = sd
+  endDate_ = ed
+  setStartEndDate = True
+End Function
 
 
 ' set defaultStartDate
@@ -525,7 +544,10 @@ End Function
 
 ' xlsx save
 Public Sub saveAsXLSX()
-  Call worksheetInit
+  If worksheetInit() = False Then
+    UtilModule.pMsg kErrorMsg, 1
+    Exit Sub
+  End If
   
   Set originBook = ThisWorkbook
   
@@ -634,7 +656,10 @@ End Sub
 ' export to pdf
 ' ---
 Public Sub saveAsPDF()
-  Call worksheetInit
+  If worksheetInit() = False Then
+    UtilModule.pMsg kErrorMsg, 1
+    Exit Sub
+  End If
   
   ' 保存先はこのファイルと同じディレクトリにする。
   saveDest = getSaveFileName(kExtPDF)
