@@ -1,5 +1,8 @@
 # CHANGE LOG
 
+## 1.1.2 (2016.5.26)
+- Stop refresh when export xlsx or pdf. Use Update Button when you need to refresh before export file.
+
 ## 1.1.1 (2016.5.26)
 - bug fixes.
 

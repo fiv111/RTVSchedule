@@ -241,3 +241,17 @@ End Function
 Public Function getWorkdayInMonth(firstDay, lastDay, holidayRange)
   getWorkdayInMonth = Application.WorksheetFunction.NetworkDays(firstDay, lastDay, holidayRange)
 End Function
+
+
+' set sharp position fixed
+Sub sharpFreeFloat()
+  For Each ws In ThisWorkbook.Worksheets
+    If ws.Shapes.Count > 0 Then
+      For Each s In ws.Shapes
+        If Not s.AutoShapeType = msoShapeMixed Then
+          s.Placement = xlFreeFloating
+        End If
+      Next
+    End If
+  Next
+End Sub

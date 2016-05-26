@@ -560,7 +560,7 @@ Public Sub saveAsXLSX()
   saveDest = getSaveFileName(kExtXLSX)
 
   ' refresh the screen
-  Call updateTask
+  ' Call updateTask
   
   Call UtilModule.stopCalculate
   
@@ -665,7 +665,7 @@ Public Sub saveAsPDF()
   saveDest = getSaveFileName(kExtPDF)
   
   ' refresh the screen
-  Call updateTask
+  ' Call updateTask
   
   Call UtilModule.stopCalculate
   
