@@ -1,5 +1,8 @@
 # CHANGE LOG
 
+## 1.1.1 (2016.5.26)
+- bug fixes.
+
 ## 1.1.0 (2016.5.26)
 - Remove the calendar control form. (Because it is not common.)
 
