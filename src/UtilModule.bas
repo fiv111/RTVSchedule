@@ -6,16 +6,16 @@ Option Explicit
 ' ---
 ' stopCalculate
 Public Sub stopCalculate()
-  Application.ScreenUpdating    = False
+  Application.ScreenUpdating = False
   ActiveSheet.EnableCalculation = False
-  Application.Calculation       = xlCalculationManual
+  Application.Calculation = xlCalculationManual
 End Sub
 
 ' startCalculate
 Public Sub startCalculate()
-  Application.Calculation       = xlCalculationAutomatic
+  Application.Calculation = xlCalculationAutomatic
   ActiveSheet.EnableCalculation = True
-  Application.ScreenUpdating    = True
+  Application.ScreenUpdating = True
 End Sub
 
 

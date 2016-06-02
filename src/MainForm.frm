@@ -13,6 +13,8 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+Option Explicit
+
 ' ---
 ' init
 ' ---
@@ -32,12 +34,17 @@ End Sub
 ' ---
 ' textbox init
 Private Sub periodFrameTextboxInit()
+  Dim sh As Worksheet
+  Dim sd As Date
+  Dim ed As Date
+  
   Set sh = ThisWorkbook.Worksheets(MainModule.kMainSheetName)
   sd = MainModule.startDate
   ed = MainModule.endDate
   
   ' if startDate is empty(00:00:00) set date as today, else set date as input value.
   If sd = CDate("00:00:00") Then
+    Dim m As Range
     Set m = sh.Range(MainModule.kDefaultStartDayAddr)
     
     If Len(m.Value) > 0 Then
@@ -53,11 +60,15 @@ Private Sub periodFrameTextboxInit()
   
   ' set enddate value
   ' endDateCol
+  Dim n As Range
   Set n = sh.Range(MainModule.kDefaultStartDayAddr).Offset(0, 3)
   
+  Dim eCol As Long
+  Dim eRow As Long
   eCol = n.Column
   eRow = UtilModule.lastRow(sh, n.Row)
   
+  Dim lastDateCell As Range
   Set lastDateCell = sh.Cells(eRow, eCol)
     
   If Not IsError(lastDateCell) Then

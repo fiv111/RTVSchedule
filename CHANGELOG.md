@@ -1,5 +1,8 @@
 # CHANGE LOG
 
+## v1.2.0 (2016.6.2)
+- Add type.
+
 ## v1.1.3 (2016.6.1)
 - UtilModule v1.1.0.
 
