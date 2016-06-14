@@ -6,16 +6,16 @@ Option Explicit
 ' ---
 ' stopCalculate
 Public Sub stopCalculate()
-  Application.ScreenUpdating = False
+  Application.ScreenUpdating    = False
   ActiveSheet.EnableCalculation = False
-  Application.Calculation = xlCalculationManual
+  Application.Calculation       = xlCalculationManual
 End Sub
 
 ' startCalculate
 Public Sub startCalculate()
-  Application.Calculation = xlCalculationAutomatic
+  Application.Calculation       = xlCalculationAutomatic
   ActiveSheet.EnableCalculation = True
-  Application.ScreenUpdating = True
+  Application.ScreenUpdating    = True
 End Sub
 
 
@@ -141,16 +141,22 @@ End Sub
 ' html TAG
 ' ---
 ' tag
-Public Function tag(ByVal tName As String, ByVal label As String) As String
+Public Function tag(ByVal tName As String, ByVal label As String, Optional ByVal styleObj As Object = Nothing) As String
   Dim doc As MSHTML.HTMLDocument
   Dim t As MSHTML.HTMLElementCollection
-  
-  Set doc = New MSHTML.HTMLDocument
-  Set t = doc.createElement(tName)
 
+  Set doc     = New MSHTML.HTMLDocument
+  Set t       = doc.createElement(tName)
   t.innerText = label
-  tag = t.outerHTML
 
+  If Not styleObj Is Nothing Then
+    Dim s As Variant
+    For Each s In styleObj
+      t.style.setAttribute s, styleObj(s)
+    Next
+  End If
+
+  tag = t.outerHTML
   Set t = Nothing
   Set doc = Nothing
 End Function
@@ -159,12 +165,12 @@ End Function
 Public Function br() As String
   Dim doc As MSHTML.HTMLDocument
   Dim t As MSHTML.HTMLElementCollection
-  
+
   Set doc = New MSHTML.HTMLDocument
   Set t = doc.createElement("br")
-  
+
   br = LCase(t.outerHTML)
-  
+
   Set t = Nothing
   Set doc = Nothing
 End Function

@@ -1,5 +1,8 @@
 # CHANGE LOG
 
+## v1.2.1 (2016.6.14)
+- use UtilModule.bas(v1.1.1).
+
 ## v1.2.0 (2016.6.2)
 - Add type.
 
