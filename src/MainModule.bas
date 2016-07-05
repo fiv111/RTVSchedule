@@ -138,7 +138,6 @@ Public Sub render()
     UtilModule.pMsg kErrorMsg, 1
     Exit Sub
   End If
-  Call insertDefaultStartDate
   Call renderCalendar
 End Sub
 
@@ -271,12 +270,6 @@ Private Function setStartEndDate() As Boolean
   ThisWorkbook.Names.Item(kEndDateName).Value = endDate
   setStartEndDate = True
 End Function
-
-
-' set defaultStartDate
-Private Sub insertDefaultStartDate()
-  mainSheet.Range(kDefaultStartDayAddr).Value = startDate
-End Sub
 
 
 ' renderCalendar

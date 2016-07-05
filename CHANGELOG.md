@@ -1,5 +1,8 @@
 # CHANGE LOG
 
+## v1.3.1 (2016.7.5)
+- remove `insertDefaultStartDate` method.
+
 ## v1.3.0 (2016.7.5)
 - Save the StartDate value and EndDate value in Names Object.
 
