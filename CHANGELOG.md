@@ -1,5 +1,8 @@
 # CHANGE LOG
 
+## v1.3.0 (2016.7.5)
+- Save the StartDate value and EndDate value in Names Object.
+
 ## v1.2.1 (2016.6.14)
 - use UtilModule.bas(v1.1.1).
 

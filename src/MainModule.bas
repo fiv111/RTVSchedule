@@ -41,6 +41,10 @@ Private Const kMonthFormat = "m"
 Private Const kWeekdayFormat = "aaa"
 Private Const kPrintMargin = 28
 
+' var names
+Public Const kStartDateName = "RTVStartDate"
+Public Const kEndDateName = "RTVEndDate"
+
 ' ---
 ' Proerties
 ' ---
@@ -253,20 +257,18 @@ End Function
 
 ' Set the start/end date value from MainForm.
 Private Function setStartEndDate() As Boolean
-  Dim sd As Date
-  Dim ed As Date
-
-  sd = CDate(MainForm.PeriodFrame.StartDateText.Value)
-  ed = CDate(MainForm.PeriodFrame.EndDateText.Value)
-
-  If Not IsDate(sd) Or Not IsDate(ed) Then
+  If Not IsDate(MainForm.PeriodFrame.StartDateText.Value) Or Not IsDate(MainForm.PeriodFrame.EndDateText.Value) Then
     UtilModule.pMsg kErrorData & "ì˙ïtÇê≥ÇµÇ≠ì¸óÕÇµÇƒÇ≠ÇæÇ≥Ç¢ÅB", 1
     setStartEndDate = False
     Exit Function
   End If
 
-  startDate_ = sd
-  endDate_ = ed
+  startDate_ = CDate(MainForm.PeriodFrame.StartDateText.Value)
+  endDate_ = CDate(MainForm.PeriodFrame.EndDateText.Value)
+  
+  ' set to var names
+  ThisWorkbook.Names.Item(kStartDateName).Value = startDate
+  ThisWorkbook.Names.Item(kEndDateName).Value = endDate
   setStartEndDate = True
 End Function
 
@@ -326,7 +328,7 @@ Private Sub drawDate()
 
     ' clear all content before refresh those values.
     mainSheet.Range(Cells(i, fCol), Cells(cRow, Columns.Count)).ClearContents
-
+    
     For j = 0 To totalDay
       ' everyday
       everyday = startDate + j
@@ -436,7 +438,7 @@ Private Sub drawTaskHead(ByVal color As String)
   lRow = UtilModule.lastRow(mainSheet, fRow)
 
   Call UtilModule.stopCalculate
-
+  
   Dim i As Variant
   Dim c As Range
 
