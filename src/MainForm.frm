@@ -34,57 +34,19 @@ End Sub
 ' ---
 ' textbox init
 Private Sub periodFrameTextboxInit()
-  Dim sh As Worksheet
   Dim sd As Date
   Dim ed As Date
   
-  Set sh = ThisWorkbook.Worksheets(MainModule.kMainSheetName)
-  sd = MainModule.startDate
-  ed = MainModule.endDate
+  sd = CDate(Replace(Replace(ThisWorkbook.Names.item(MainModule.kStartDateName), "=", ""), Chr(34), ""))
+  ed = CDate(Replace(Replace(ThisWorkbook.Names.item(MainModule.kEndDateName), "=", ""), Chr(34), ""))
   
-  ' if startDate is empty(00:00:00) set date as today, else set date as input value.
-  If sd = CDate("00:00:00") Then
-    Dim m As Range
-    Set m = sh.Range(MainModule.kDefaultStartDayAddr)
-    
-    If Len(m.Value) > 0 Then
-      MainForm.PeriodFrame.StartDateText.Value = m.Value
-    Else
-      MainForm.PeriodFrame.StartDateText.Value = Date
-    End If
-    
-    Set m = Nothing
-  Else
-    MainForm.PeriodFrame.StartDateText.Value = sd
-  End If
-  
-  ' set enddate value
-  ' endDateCol
-  Dim n As Range
-  Set n = sh.Range(MainModule.kDefaultStartDayAddr).Offset(0, 3)
-  
-  Dim eCol As Long
-  Dim eRow As Long
-  eCol = n.Column
-  eRow = UtilModule.lastRow(sh, n.Row)
-  
-  Dim lastDateCell As Range
-  Set lastDateCell = sh.Cells(eRow, eCol)
-    
-  If Not IsError(lastDateCell) Then
-    If IsDate(lastDateCell.Value) And Len(lastDateCell.Value) > 0 Then
-      MainForm.PeriodFrame.EndDateText.Value = lastDateCell.Value
-    Else
-      MainForm.PeriodFrame.EndDateText.Value = Date + 31
-    End If
-  End If
-  
-  Set lastDateCell = Nothing
-  Set n = Nothing
-  Set sh = Nothing
+  MainForm.PeriodFrame.StartDateText.value = sd
+  MainForm.PeriodFrame.EndDateText.value = ed
 End Sub
 
-
+' ---
+' Event
+' ---
 ' Render button on click handler.
 ' Set start/end date property, and refresh the screen (schedule).
 Private Sub RenderButton_Click()
@@ -92,17 +54,28 @@ Private Sub RenderButton_Click()
 End Sub
 
 
+Private Sub StartDateText_MouseDown(ByVal Button As Integer, ByVal Shift As Integer, ByVal X As Single, ByVal Y As Single)
+  Load RVCalendarForm
+  RVCalendarForm.form = Me.PeriodFrame
+End Sub
+
+Private Sub EndDateText_MouseDown(ByVal Button As Integer, ByVal Shift As Integer, ByVal X As Single, ByVal Y As Single)
+  Load RVCalendarForm
+  RVCalendarForm.form = Me.PeriodFrame
+End Sub
+
+
 ' ---
 ' FieldFrame
 ' ---
 Private Sub fieldFrameInit()
-  MainForm.FieldFrame.BindingCheckBox.Value = False
-  MainModule.binding = MainForm.FieldFrame.BindingCheckBox.Value
+  MainForm.FieldFrame.BindingCheckBox.value = False
+  MainModule.binding = MainForm.FieldFrame.BindingCheckBox.value
 End Sub
 
 
 Private Sub BindingCheckBox_Change()
-  MainModule.binding = MainForm.FieldFrame.BindingCheckBox.Value
+  MainModule.binding = MainForm.FieldFrame.BindingCheckBox.value
   
   If MainModule.binding = True Then
     MainForm.FieldFrame.UpdateButton.Visible = False
@@ -123,7 +96,7 @@ Private Sub XlsxButton_Click()
   Call MainModule.saveAsXLSX
 End Sub
 
-
 Private Sub PdfButton_Click()
   Call MainModule.saveAsPDF
 End Sub
+
