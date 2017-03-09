@@ -1,5 +1,10 @@
 # CHANGE LOG
 
+## v1.4.1 (2017.3.9)
+- Auto update when open file.
+- Save file as 'schedule.xlsx' when file is not exist.
+- Save file as 'schedule-yyyymmddhhmmss.xlsx' when 'schedule.xlsx' exists.
+
 ## v1.4.0 (2016.7.15)
 - remove `MainModuleNoType.bas`
 - use [RVCalendar (v0.1.1)](https://github.com/fiv111/RVCalendar "RVCalendar")

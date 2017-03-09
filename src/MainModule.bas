@@ -168,13 +168,13 @@ Public Function getStartDate() As Variant
   Set c = mainSheet.Range(UtilModule.curtAddr()).Offset(-1)
   
   ' 空の場合2つ上、ものがあるなら 1つ上のセルを取得
-  If Len(c.Value) <= 0 Then
+  If Len(c.value) <= 0 Then
     Set e = mainSheet.Range(UtilModule.curtAddr()).Offset(-2, 3)
   Else
     Set e = mainSheet.Range(UtilModule.curtAddr()).Offset(-1, 3)
   End If
 
-  getStartDate = Application.WorksheetFunction.WorkDay(e.Value, p.Value, holidayRange())
+  getStartDate = Application.WorksheetFunction.WorkDay(e.value, p.value, holidayRange())
 
   Set c = Nothing
   Set p = Nothing
@@ -190,7 +190,7 @@ Public Function getEndDate() As Variant
   Set e = mainSheet.Range(UtilModule.curtAddr()).Offset(0, -3)
   Set p = mainSheet.Range(UtilModule.curtAddr()).Offset(0, -2)
   
-  getEndDate = Application.WorksheetFunction.WorkDay(e.Value, p.Value - 1, holidayRange())
+  getEndDate = Application.WorksheetFunction.WorkDay(e.value, p.value - 1, holidayRange())
   
   Set p = Nothing
   Set e = Nothing
@@ -213,6 +213,7 @@ Private Sub Auto_Open()
   mainSheet.Activate
   ActiveSheet.Calculate
   
+  Call updateTask
   Call UtilModule.startCalculate
 End Sub
 
@@ -256,18 +257,18 @@ End Function
 
 ' Set the start/end date value from MainForm.
 Private Function setStartEndDate() As Boolean
-  If Not IsDate(MainForm.PeriodFrame.StartDateText.Value) Or Not IsDate(MainForm.PeriodFrame.EndDateText.Value) Then
+  If Not IsDate(MainForm.PeriodFrame.StartDateText.value) Or Not IsDate(MainForm.PeriodFrame.EndDateText.value) Then
     UtilModule.pMsg kErrorData & "日付を正しく入力してください。", 1
     setStartEndDate = False
     Exit Function
   End If
 
-  startDate_ = CDate(MainForm.PeriodFrame.StartDateText.Value)
-  endDate_ = CDate(MainForm.PeriodFrame.EndDateText.Value)
+  startDate_ = CDate(MainForm.PeriodFrame.StartDateText.value)
+  endDate_ = CDate(MainForm.PeriodFrame.EndDateText.value)
   
   ' set to var names
-  ThisWorkbook.Names.Item(kStartDateName).Value = startDate
-  ThisWorkbook.Names.Item(kEndDateName).Value = endDate
+  ThisWorkbook.Names.item(kStartDateName).value = startDate
+  ThisWorkbook.Names.item(kEndDateName).value = endDate
   setStartEndDate = True
 End Function
 
@@ -332,22 +333,22 @@ Private Sub drawDate()
 
       ' Position of month.
       If i = fRow Then
-        If Day(everyday) = 1 Or j = 0 Then
+        If day(everyday) = 1 Or j = 0 Then
           ' print year when month is 1.
           If Format(everyday, kMonthFormat) = 1 Then
-            c.Value = Format(everyday, kYearMonthFormat)
+            c.value = Format(everyday, kYearMonthFormat)
           Else
-            c.Value = Format(everyday, kMonthFormat)
+            c.value = Format(everyday, kMonthFormat)
           End If
         End If
 
       ' Position of day.
       ElseIf i = fRow + 1 Then
-        c.Value = Day(everyday)
+        c.value = day(everyday)
 
       ' Position of week day.
       ElseIf i = maxRow Then
-        c.Value = Format(everyday, kWeekdayFormat)
+        c.value = Format(everyday, kWeekdayFormat)
       End If
 
       ' is today
@@ -438,8 +439,8 @@ Private Sub drawTaskHead(ByVal color As String)
   For i = fRow To lRow
     Set c = mainSheet.Cells(i, fCol)
 
-    If Len(c.Offset(0, -1).Value) <= 0 _
-    And Len(c.Offset(0, 1).Value) <= 0 _
+    If Len(c.Offset(0, -1).value) <= 0 _
+    And Len(c.Offset(0, 1).value) <= 0 _
     And c.Interior.color = UtilModule.getRGB(color) _
     Then
       Call drawCell(mainSheet.Range(mainSheet.Cells(i, fCol - 1), mainSheet.Cells(i, Columns.Count)), color)
@@ -481,26 +482,26 @@ Private Sub drawTask()
     Or Not taskEndCell Is Nothing _
     Or Not wdayPeriodCell Is Nothing Then
 
-      If Not IsError(taskStartCell.Value) _
-      And Not IsError(taskEndCell.Value) Then
+      If Not IsError(taskStartCell.value) _
+      And Not IsError(taskEndCell.value) Then
 
-        If Len(taskStartCell.Value) > 0 _
-        And Len(taskEndCell.Value) > 0 Then
+        If Len(taskStartCell.value) > 0 _
+        And Len(taskEndCell.value) > 0 Then
 
           Dim period As Integer
           Dim wdayPeriod As Integer
-          period = taskEndCell.Value - taskStartCell.Value
-          wdayPeriod = wdayPeriodCell.Value
+          period = taskEndCell.value - taskStartCell.value
+          wdayPeriod = wdayPeriodCell.value
 
           Dim j As Variant
           For j = 0 To period
             Dim everyday As Date
-            everyday = taskStartCell.Value + j
+            everyday = taskStartCell.value + j
 
             Dim k As Variant
             For k = 0 To wdayPeriod
               Dim wday As Date
-              wday = CDate(WorksheetFunction.WorkDay(taskStartCell.Value, k, holidayRange()))
+              wday = CDate(WorksheetFunction.WorkDay(taskStartCell.value, k, holidayRange()))
 
               If everyday = wday Then
                 Dim taskColor As Long
@@ -522,7 +523,7 @@ Private Sub drawTask()
 
                 Dim sCol As Long
                 ' 各タスクの開始カラム (デフォルトカラム + タスクの開始日 - スケジュール開始日)
-                sCol = (fCol + taskStartCell.Value - startDate)
+                sCol = (fCol + taskStartCell.value - startDate)
                 If sCol > 0 Then
                   mainSheet.Cells(i, sCol + j).Interior.color = taskColor
                 End If
@@ -581,12 +582,20 @@ End Sub
 ' Export file
 ' ---
 Private Function getSaveFileName(ByVal ext As String) As String
-  Dim fName As String
-
-  ' filename
-  fName = "schedule-" & Format(Date, "yyyymmdd") & Format(time, "hhmmss")
+  Dim output As String
+  Dim fso As Object
+  
+  Set fso = CreateObject("Scripting.FileSystemObject")
+  
   ' dest
-  getSaveFileName = ThisWorkbook.Path & "\" & fName & ext
+  output = ThisWorkbook.Path & "\" & "schedule" & ext
+  
+  If fso.FileExists(output) Then
+    output = ThisWorkbook.Path & "\" & "schedule-" & Format(Date, "yyyymmdd") & Format(time, "hhmmss") & ext
+    getSaveFileName = output
+  Else
+    getSaveFileName = output
+  End If
 End Function
 
 
