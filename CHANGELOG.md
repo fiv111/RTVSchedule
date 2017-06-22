@@ -1,5 +1,8 @@
 # CHANGE LOG
 
+## v2.0.0 (2017.6.22)
+- Add main.ps1. Use powershell to build master file.
+
 ## v1.4.1 (2017.3.9)
 - Auto update when open file.
 - Save file as 'schedule.xlsx' when file is not exist.
