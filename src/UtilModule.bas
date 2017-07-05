@@ -399,8 +399,13 @@ Public Sub shapesFreeFloating()
   For Each ws In ThisWorkbook.Worksheets
     If ws.Shapes.Count > 0 Then
       For Each s In ws.Shapes
-        If Not s.AutoShapeType = msoShapeMixed Then
-          s.Placement = xlFreeFloating
+        If (s.Type = msoPicture) Or (s.Type = msoTextBox) Or _
+           (s.Type = msoShapeTypeMixed) Or (s.Type = msoOLEControlObject) Or _
+           (s.Type = msoLinkedPicture) Or (s.Type = msoLinkedOLEObject) Or _
+           (s.Type = msoLine) Or (s.Type = msoGroup) Or _
+           (s.Type = msoChart) Or (s.Type = msoCanvas) Or _
+           (s.Type = msoAutoShape) Then
+             s.Placement = xlFreeFloating
         End If
       Next
     End If
